@@ -1,0 +1,9 @@
+/* index.css or App.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global dark mode styles */
+body.dark {
+  @apply bg-gray-900 text-white;
+}
