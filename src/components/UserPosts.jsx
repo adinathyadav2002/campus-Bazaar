@@ -44,7 +44,7 @@ const UserPosts = () => {
     const fetchUserPosts = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BACKEND}/api/posts/user`,
+          `${import.meta.env.VITE_BACKEND}/api/posts/user`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -116,7 +116,9 @@ const UserPosts = () => {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND}/api/posts/editPost/${selectedPost._id}`,
+        `${import.meta.env.VITE_BACKEND}/api/posts/editPost/${
+          selectedPost._id
+        }`,
         formData,
         {
           headers: {
@@ -160,7 +162,7 @@ const UserPosts = () => {
       setDeletingId(id);
 
       const response = await axios.delete(
-        `${process.env.REACT_APP_BACKEND}/api/posts/delete/${id}`,
+        `${import.meta.env.VITE_BACKEND}/api/posts/delete/${id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

@@ -33,7 +33,7 @@ const AnimatedSearchInput = ({ searchQuery, setSearchQuery }) => {
   const fetchAllProducts = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND}/api/posts/d?page=1&limit=12`
+        `${import.meta.env.VITE_BACKEND}/api/posts/d?page=1&limit=12`
       );
       const data = await response.json();
       if (Array.isArray(data)) {
@@ -55,7 +55,7 @@ const AnimatedSearchInput = ({ searchQuery, setSearchQuery }) => {
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND}/api/search?query=${encodeURIComponent(
+        `${import.meta.env.VITE_BACKEND}/api/search?query=${encodeURIComponent(
           trimmedQuery
         )}`
       );

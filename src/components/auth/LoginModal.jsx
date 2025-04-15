@@ -1,33 +1,43 @@
-import { X } from 'lucide-react';
+import { X } from "lucide-react";
 import { auth, googleProvider } from "../../firebase";
 import { signInWithPopup } from "firebase/auth";
 import axios from "axios";
-import { useState, useEffect, useContext } from 'react';
-import {showToast} from '../ToastComponent';
-import Loader from '../Loader';
-import AppContext from '../../context/AppContext';
+import { useState, useEffect, useContext } from "react";
+import { showToast } from "../ToastComponent";
+import Loader from "../Loader";
+import AppContext from "../../context/AppContext";
 
-const LoginModal = ({ isOpen, onClose, onSignupClick, error, loading, handleLogin }) => {
+const LoginModal = ({
+  isOpen,
+  onClose,
+  onSignupClick,
+  error,
+  loading,
+  handleLogin,
+}) => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  
+
   const slides = [
     {
-      image: "https://res.cloudinary.com/dailaa9bp/image/upload/v1741378898/uploads/ij8gkmqjw8zvduhiyiiq.jpg ",
-      text: "Help us become one of the safest places to buy and sell"
+      image:
+        "https://res.cloudinary.com/dailaa9bp/image/upload/v1741378898/uploads/ij8gkmqjw8zvduhiyiiq.jpg ",
+      text: "Help us become one of the safest places to buy and sell",
     },
     {
-      image: "https://res.cloudinary.com/dailaa9bp/image/upload/v1741378898/uploads/mldzl7pdy40wsr3eadux.jpg ",
-      text: "Close deals from the comfort of your home"
+      image:
+        "https://res.cloudinary.com/dailaa9bp/image/upload/v1741378898/uploads/mldzl7pdy40wsr3eadux.jpg ",
+      text: "Close deals from the comfort of your home",
     },
     {
-      image: "https://res.cloudinary.com/dailaa9bp/image/upload/v1741378898/uploads/jcrcsfpzsueuvdeanphr.jpg ",
-      text: "Keep all your favourites in one place"
-    }
+      image:
+        "https://res.cloudinary.com/dailaa9bp/image/upload/v1741378898/uploads/jcrcsfpzsueuvdeanphr.jpg ",
+      text: "Keep all your favourites in one place",
+    },
   ];
 
-  const [load,setLoad] = useState(false);
+  const [load, setLoad] = useState(false);
 
-  const {setLogin} = useContext(AppContext);
+  const { setLogin } = useContext(AppContext);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -45,8 +55,8 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, error, loading, handleLogi
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
 
-      let url = String(process.env.REACT_APP_BACKEND)
-      url += '/api/auth/google'
+      let url = String(import.meta.env.VITE_BACKEND);
+      url += "/api/auth/google";
       // Send user data to backend
       const response = await axios.post(url, {
         name: user.displayName,
@@ -54,20 +64,18 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, error, loading, handleLogi
         photo: user.photoURL,
       });
 
-      
-      if(response.data.status){
+      if (response.data.status) {
         setLogin(true);
-        localStorage.setItem('token',response.data.token);
-        showToast(response.data.message,'success');
+        localStorage.setItem("token", response.data.token);
+        showToast(response.data.message, "success");
         onClose();
-      }else{
-        showToast(response.data.message,'error');
+      } else {
+        showToast(response.data.message, "error");
       }
     } catch (error) {
-      showToast("Something went wrong","error");
+      showToast("Something went wrong", "error");
       console.error("Google Sign-in Error:", error);
-    }
-    finally{
+    } finally {
       setLoad(false);
     }
   };
@@ -83,30 +91,33 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, error, loading, handleLogi
         </div>
 
         <div className="relative mb-6">
-  {/* Image Container */}
-  <div className="h-48 overflow-hidden rounded-full mb-4 relative">
-    {slides.map((slide, index) => (
-      <div
-        key={index}
-        className={`absolute inset-0 w-full h-full transition-opacity duration-500 ${
-          index === currentSlide ? "opacity-100" : "opacity-0"
-        }`}
-      >
-        <img
-          src={slide.image}
-          alt={slide.text}
-          className="w-full h-full object-contain"
-        />
-      </div>
-    ))}
-  </div>
+          {/* Image Container */}
+          <div className="h-48 overflow-hidden rounded-full mb-4 relative">
+            {slides.map((slide, index) => (
+              <div
+                key={index}
+                className={`absolute inset-0 w-full h-full transition-opacity duration-500 ${
+                  index === currentSlide ? "opacity-100" : "opacity-0"
+                }`}
+              >
+                <img
+                  src={slide.image}
+                  alt={slide.text}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            ))}
+          </div>
 
-  {/* Text */}
-  <div className="text-center mt-4"> {/* Added margin-top for spacing */}
-    <p className="text-gray-700 font-semibold">{slides[currentSlide].text}</p>
-  </div>
-</div>
-
+          {/* Text */}
+          <div className="text-center mt-4">
+            {" "}
+            {/* Added margin-top for spacing */}
+            <p className="text-gray-700 font-semibold">
+              {slides[currentSlide].text}
+            </p>
+          </div>
+        </div>
 
         <button
           type="button"
@@ -114,19 +125,18 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, error, loading, handleLogi
           disabled={load}
           className="w-full bg-white text-gray-700 p-3 rounded-lg hover:bg-gray-100 transition font-semibold flex items-center justify-center gap-2 border border-gray-300"
         >
-          {
-            !load &&
-          <img
-            src="https://www.google.com/favicon.ico"
-            alt="Google"
-            className="w-5 h-5"
-          />
-          }
-          {load ? <Loader/> : 'Login with Google' }
+          {!load && (
+            <img
+              src="https://www.google.com/favicon.ico"
+              alt="Google"
+              className="w-5 h-5"
+            />
+          )}
+          {load ? <Loader /> : "Login with Google"}
         </button>
       </div>
     </div>
   );
 };
 
-export default LoginModal; 
+export default LoginModal;

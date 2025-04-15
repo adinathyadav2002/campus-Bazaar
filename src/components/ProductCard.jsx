@@ -83,7 +83,7 @@ const ProductCard = ({
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND}/api/posts/likePost/${_id}`,
+        `${import.meta.env.VITE_BACKEND}/api/posts/likePost/${_id}`,
         {
           method: "GET",
           headers: {

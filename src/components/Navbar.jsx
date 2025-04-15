@@ -83,7 +83,7 @@ const Navbar = ({ onCategorySelect }) => {
     e.preventDefault();
 
     try {
-      const url = `${process.env.REACT_APP_BACKEND}/api/search/cat/${category}`;
+      const url = `${import.meta.env.VITE_BACKEND}/api/search/cat/${category}`;
       const { resStatus, data, error } = await apiRequest(url, "GET");
 
       if (resStatus) {
@@ -111,7 +111,7 @@ const Navbar = ({ onCategorySelect }) => {
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND}/api/user/login`,
+        `${import.meta.env.VITE_BACKEND}/api/user/login`,
         {
           method: "POST",
           headers: {
@@ -175,7 +175,7 @@ const Navbar = ({ onCategorySelect }) => {
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND}/api/user/signup`,
+        `${import.meta.env.VITE_BACKEND}/api/user/signup`,
         {
           method: "POST",
           headers: {
@@ -204,7 +204,7 @@ const Navbar = ({ onCategorySelect }) => {
   };
 
   const checkUserDetails = async () => {
-    let url = String(process.env.REACT_APP_BACKEND);
+    let url = String(import.meta.env.VITE_BACKEND);
     url += "/api/user/checkUser";
 
     const { resStatus, data, error } = await apiRequest(url, "GET", {
@@ -246,7 +246,7 @@ const Navbar = ({ onCategorySelect }) => {
       try {
         const response = await fetch(
           `${
-            process.env.REACT_APP_BACKEND
+            import.meta.env.VITE_BACKEND
           }/api/search?title=${encodeURIComponent(searchQuery)}`
         );
 
@@ -294,12 +294,12 @@ const Navbar = ({ onCategorySelect }) => {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center">
-              <a href="/" className="flex items-center">
+              <Link to="/" className="flex items-center">
                 <span className="text-3xl font-extrabold">
                   <span className="text-[#3a77ff]">Campus</span>
                   <span className="text-[#ffce32]">Bazzar</span>
                 </span>
-              </a>
+              </Link>
             </div>
 
             {/* Mobile menu button */}

@@ -64,7 +64,7 @@ const PostAdForm = () => {
   };
 
   const checkUserDetails = async () => {
-    let url = String(process.env.REACT_APP_BACKEND);
+    let url = String(import.meta.env.VITE_BACKEND);
     url += "/api/user/checkUser";
 
     const { resStatus, data, error } = await apiRequest(url, "GET", {
@@ -106,7 +106,7 @@ const PostAdForm = () => {
         return;
       }
       const userdataResponse = await fetch(
-        `${process.env.REACT_APP_BACKEND}/api/user/`,
+        `${import.meta.env.VITE_BACKEND}/api/user/`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -133,7 +133,7 @@ const PostAdForm = () => {
       });
 
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND}/api/posts/add`,
+        `${import.meta.env.VITE_BACKEND}/api/posts/add`,
         {
           method: "POST",
           body: data,

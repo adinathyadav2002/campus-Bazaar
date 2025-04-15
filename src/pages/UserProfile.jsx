@@ -26,7 +26,7 @@ const UserProfile = () => {
   const [activeTab, setActiveTab] = useState("profile");
 
   // Base API URL from environment variable
-  const baseUrl = process.env.REACT_APP_BACKEND;
+  const baseUrl = import.meta.env.VITE_BACKEND;
 
   // Fetch User Information
   useEffect(() => {

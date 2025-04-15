@@ -175,10 +175,10 @@ const Footer = () => {
           {/* Newsletter */}
           <div className="col-span-1 lg:col-span-2">
             <h3 className="text-xl font-semibold mb-5 pb-2 border-b border-gray-700 inline-block text-[#ffce32]">
-              Stay Updated
+              Contact us.
             </h3>
             <p className="text-gray-300 mb-4">
-              Subscribe to our newsletter for the latest campus deals.
+              We are eager to accept suggestion. Contact us for suggestions.
             </p>
 
             <form className="flex flex-col sm:flex-row">
@@ -191,7 +191,7 @@ const Footer = () => {
                 type="submit"
                 className="bg-[#3a77ff] hover:bg-blue-600 text-white font-medium px-6 py-3 rounded-r-lg transition-colors mt-2 sm:mt-0"
               >
-                Subscribe
+                Contact
               </button>
             </form>
           </div>

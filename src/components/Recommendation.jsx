@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Heart } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import Spinner from './Spinner';
+import React, { useState, useEffect } from "react";
+import { Heart } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import Spinner from "./Spinner";
 
 const Tag = () => <span>🏷️</span>;
 const MapPin = () => <span>📍</span>;
@@ -16,33 +16,36 @@ const Recommendation = () => {
 
   useEffect(() => {
     const fetchRecommendations = async () => {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       if (!token) {
-        navigate('/loginNew');
+        navigate("/loginNew");
         return;
       }
 
       try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/posts/getRecommendation`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
+        const response = await fetch(
+          `${import.meta.env.VITE_BACKEND}/api/posts/getRecommendation`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
-        });
+        );
 
         if (!response.ok) {
-          throw new Error('Failed to fetch recommendations');
+          throw new Error("Failed to fetch recommendations");
         }
 
         const data = await response.json();
         if (data.status && Array.isArray(data.posts)) {
           const allProducts = data.posts.flat();
           const uniqueProducts = Array.from(
-            new Map(allProducts.map(item => [item._id, item])).values()
+            new Map(allProducts.map((item) => [item._id, item])).values()
           );
           setRecommendedProducts(uniqueProducts);
         }
       } catch (error) {
-        console.error('Error fetching recommendations:', error);
+        console.error("Error fetching recommendations:", error);
         setError(error.message);
       } finally {
         setLoading(false);
@@ -86,10 +89,16 @@ const Recommendation = () => {
           {recommendedProducts.map((product) => (
             <motion.div
               key={product._id}
-              onClick={() => navigate('/detail', { 
-                state: { ...product }
-              })}
-              whileHover={{ scale: 1.03, boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.15)", y: -3 }}
+              onClick={() =>
+                navigate("/detail", {
+                  state: { ...product },
+                })
+              }
+              whileHover={{
+                scale: 1.03,
+                boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.15)",
+                y: -3,
+              }}
               transition={{ duration: 0.3 }}
               className="relative flex flex-col rounded-xl overflow-hidden object-cover shadow-md cursor-pointer bg-white border border-gray-200 transition-transform"
             >
@@ -117,22 +126,26 @@ const Recommendation = () => {
                 <div className="flex items-center justify-between text-xs text-gray-500 mt-2">
                   <div className="flex items-center truncate max-w-[60%]">
                     <MapPin size={14} className="mr-1 flex-shrink-0" />
-                    <span className="truncate">{product.userId?.address || 'Not specified'}</span>
+                    <span className="truncate">
+                      {product.userId?.address || "Not specified"}
+                    </span>
                   </div>
                   <div className="flex items-center">
                     <Clock size={14} className="mr-1" />
                     <span>
-                      {new Date(product.createdAt).toLocaleDateString('en-GB', {
-                        year: '2-digit',
-                        month: '2-digit',
-                        day: '2-digit'
+                      {new Date(product.createdAt).toLocaleDateString("en-GB", {
+                        year: "2-digit",
+                        month: "2-digit",
+                        day: "2-digit",
                       })}
                     </span>
                   </div>
                 </div>
                 {/* Price Tag */}
                 <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full shadow-md">
-                  <span className="text-gray-900 font-semibold">₹{product.price}</span>
+                  <span className="text-gray-900 font-semibold">
+                    ₹{product.price}
+                  </span>
                 </div>
               </div>
             </motion.div>
@@ -156,4 +169,4 @@ const Recommendation = () => {
   );
 };
 
-export default Recommendation; 
+export default Recommendation;
