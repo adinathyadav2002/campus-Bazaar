@@ -17,7 +17,7 @@ import AnimatedSearchInput from "./AnimatedSearchInput";
 
 import LoginModal from "./auth/LoginModal";
 import SignupModal from "./auth/SignupModal";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import AppContext from "../context/AppContext";
 import apiRequest from "../utils/ApiRequest";
@@ -25,8 +25,6 @@ import { showToast } from "./ToastComponent";
 
 const Navbar = ({ onCategorySelect }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [location, setLocation] = useState("PCCOE");
-  const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
   const [error, setError] = useState("");
@@ -35,13 +33,7 @@ const Navbar = ({ onCategorySelect }) => {
   const navigate = useNavigate();
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const routeLocation = useLocation();
   const [scrolled, setScrolled] = useState(false);
-
-  const handleLocationSelect = (loc) => {
-    setLocation(loc);
-    setIsLocationDropdownOpen(false);
-  };
 
   const { login, setLogin } = useContext(AppContext);
 
@@ -77,31 +69,6 @@ const Navbar = ({ onCategorySelect }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
-  // Handle category selection and fetch products
-  const handleCategoryClick = async (category, e) => {
-    e.preventDefault();
-
-    try {
-      const url = `${import.meta.env.VITE_BACKEND}/api/search/cat/${category}`;
-      const { resStatus, data, error } = await apiRequest(url, "GET");
-
-      if (resStatus) {
-        // Call the callback function to update products in parent component
-        if (onCategorySelect && typeof onCategorySelect === "function") {
-          onCategorySelect(data, category);
-        }
-
-        // Navigate to the category page
-        navigate(`/${category}`);
-      } else {
-        showToast(error?.message || "Failed to fetch products", "error");
-        navigate("/");
-      }
-    } catch (err) {
-      showToast("Error fetching products", "error");
-    }
-  };
 
   // Updated login handler
   const handleLogin = async (e) => {
@@ -153,7 +120,7 @@ const Navbar = ({ onCategorySelect }) => {
         setError(data.message || "Login failed");
       }
     } catch (err) {
-      toast.error("Something went wrong. Please try again.", {
+      toast.error(err || "Something went wrong. Please try again.", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -197,7 +164,7 @@ const Navbar = ({ onCategorySelect }) => {
       }
     } catch (err) {
       setError("Something went wrong. Please try again.");
-      toast.error("Something went wrong. Please try again.");
+      toast.error(err || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -257,11 +224,7 @@ const Navbar = ({ onCategorySelect }) => {
           }
 
           // Navigate to search results page
-          navigate(
-            `/search?q=${encodeURIComponent(
-              searchQuery
-            )}&location=${encodeURIComponent(location)}`
-          );
+          navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
         } else {
           showToast(error?.message || "Failed to search products", "error");
         }

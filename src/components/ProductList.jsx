@@ -85,7 +85,7 @@ const ProductList = () => {
           }));
 
           totalFetchedPosts.current = [
-            ...totalFetchedPosts.current,
+            // ...totalFetchedPosts.current,
             ...newPosts,
           ];
           setProducts(totalFetchedPosts.current);
@@ -133,9 +133,12 @@ const ProductList = () => {
   // Effect for page changes
   useEffect(() => {
     if (page > 1) {
-      loadMoreProducts(Array.from(likedPostIds));
+      const loadMore = async () => {
+        await loadMoreProducts(Array.from(likedPostIds));
+      };
+      loadMore();
     }
-  }, [page, loadMoreProducts]);
+  }, [page]);
 
   // Listen for like/unlike events
   useEffect(() => {
@@ -177,13 +180,6 @@ const ProductList = () => {
     [loading, hasMore]
   );
 
-  // Manual load more function (as a backup)
-  const handleLoadMore = () => {
-    if (!loading && hasMore) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
-
   return (
     <section className="bg-gray-100 py-10">
       <div className="max-w-7xl mx-auto px-4">
@@ -217,18 +213,6 @@ const ProductList = () => {
                 </div>
               )}
             </div>
-
-            {/* Manual load more button as a backup */}
-            {/* {hasMore && !loading && (
-              <div className="mt-8 flex justify-center">
-                <button
-                  onClick={handleLoadMore}
-                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-                >
-                  Load More
-                </button>
-              </div>
-            )} */}
           </>
         )}
 
@@ -238,11 +222,6 @@ const ProductList = () => {
             <Spinner />
           </div>
         )}
-
-        {/* No more products message */}
-        {/* {!hasMore && products.length > 0 && !loading && (
-          <p className="text-center mt-8 text-gray-500">You've reached the end of the listings</p>
-        )} */}
       </div>
     </section>
   );

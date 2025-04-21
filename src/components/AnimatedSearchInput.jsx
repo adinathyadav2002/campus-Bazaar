@@ -62,8 +62,6 @@ const AnimatedSearchInput = ({ searchQuery, setSearchQuery }) => {
 
       const data = await response.json();
 
-      console.log("seachquery", searchQuery);
-      console.log(data.posts);
       setProducts(data.status ? data.posts : []);
     } catch (error) {
       console.error("Error fetching posts:", error);
@@ -93,7 +91,7 @@ const AnimatedSearchInput = ({ searchQuery, setSearchQuery }) => {
       <input
         type="text"
         placeholder={placeholder}
-        className="w-full border-2 border-r-0 py-2 px-4 outline-none focus:border-[#23e5db] transition-all duration-200"
+        className="w-full border-2 rounded-l-md py-2 px-4 outline-none focus:border-[#23e5db] transition-all duration-200 border-gray-300"
         value={searchQuery}
         onChange={handleInputChange}
       />

@@ -81,39 +81,54 @@ const LoginModal = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-xl w-96">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-[#002f34]">Login</h2>
-          <button onClick={onClose}>
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-gradient-to-br from-teal-500/40 to-blue-600/40 backdrop-blur-sm">
+      <div className="bg-white p-8 rounded-xl shadow-2xl w-96 border border-gray-100">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-[#002f34] tracking-tight">
+            Login
+          </h2>
+          <button
+            onClick={onClose}
+            className="rounded-full p-1 hover:bg-gray-100 transition-colors"
+          >
             <X size={24} className="text-gray-500 hover:text-gray-700" />
           </button>
         </div>
 
-        <div className="relative mb-6">
+        <div className="relative mb-8">
           {/* Image Container */}
-          <div className="h-48 overflow-hidden rounded-full mb-4 relative">
+          <div className="h-52 w-52 mx-auto overflow-hidden rounded-full mb-6 relative shadow-lg border-4 border-white ring-2 ring-gray-100">
             {slides.map((slide, index) => (
               <div
                 key={index}
-                className={`absolute inset-0 w-full h-full transition-opacity duration-500 ${
+                className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out ${
                   index === currentSlide ? "opacity-100" : "opacity-0"
                 }`}
               >
                 <img
                   src={slide.image}
                   alt={slide.text}
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-cover"
                 />
               </div>
             ))}
           </div>
 
+          {/* Indicators */}
+          <div className="flex justify-center gap-2 mb-4">
+            {slides.map((_, index) => (
+              <div
+                key={index}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  index === currentSlide ? "w-6 bg-teal-500" : "w-2 bg-gray-300"
+                }`}
+              />
+            ))}
+          </div>
+
           {/* Text */}
-          <div className="text-center mt-4">
-            {" "}
-            {/* Added margin-top for spacing */}
-            <p className="text-gray-700 font-semibold">
+          <div className="text-center">
+            <p className="text-gray-700 font-medium text-lg">
               {slides[currentSlide].text}
             </p>
           </div>
@@ -123,7 +138,7 @@ const LoginModal = ({
           type="button"
           onClick={handleGoogleLogin}
           disabled={load}
-          className="w-full bg-white text-gray-700 p-3 rounded-lg hover:bg-gray-100 transition font-semibold flex items-center justify-center gap-2 border border-gray-300"
+          className="w-full bg-white text-gray-700 p-4 rounded-lg hover:bg-gray-50 active:bg-gray-100 transition font-semibold flex items-center justify-center gap-3 border border-gray-300 shadow-sm"
         >
           {!load && (
             <img
@@ -132,8 +147,21 @@ const LoginModal = ({
               className="w-5 h-5"
             />
           )}
-          {load ? <Loader /> : "Login with Google"}
+          {load ? <Loader className="animate-spin" /> : "Login with Google"}
         </button>
+
+        <div className="text-center mt-5 text-sm text-gray-500">
+          By continuing, you agree to our
+          <a href="#" className="text-teal-600 hover:underline">
+            {" "}
+            Terms of Service
+          </a>{" "}
+          and
+          <a href="#" className="text-teal-600 hover:underline">
+            {" "}
+            Privacy Policy
+          </a>
+        </div>
       </div>
     </div>
   );
