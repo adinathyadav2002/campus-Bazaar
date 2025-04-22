@@ -138,7 +138,7 @@ const LoginModal = ({
           type="button"
           onClick={handleGoogleLogin}
           disabled={load}
-          className="w-full bg-white text-gray-700 p-4 rounded-lg hover:bg-gray-50 active:bg-gray-100 transition font-semibold flex items-center justify-center gap-3 border border-gray-300 shadow-sm"
+          className="w-full cursor-pointer bg-white text-gray-700 p-4 rounded-lg hover:bg-gray-50 active:bg-gray-100 transition font-semibold flex items-center justify-center gap-3 border border-gray-300 shadow-sm"
         >
           {!load && (
             <img
