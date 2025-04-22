@@ -305,10 +305,10 @@ const UserProfile = () => {
                 viewBox="0 0 800 800"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path
+                {/* <path
                   d="M435.5,141.7C429,175.8,386.9,181.5,359.9,200.9C335.5,218.3,324.7,250.6,316.9,280.5C306.1,320.7,294.8,366.3,318.3,401.3C337.8,429.7,373.9,438.8,408.1,438.7C438.2,438.7,469.7,438.6,495.1,426.7C522.5,413.9,542.3,386.2,553.3,356.8C565.7,323.6,564.1,287.9,564.2,252.4C564.3,220.1,569.7,183.2,547.7,159.2C527.8,137.5,490.5,129.1,461.8,133.2C447.3,135.3,439.7,121.9,435.5,141.7Z"
                   fill="#fff"
-                />
+                /> */}
               </svg>
             </div>
 
@@ -392,13 +392,13 @@ const UserProfile = () => {
               {/* Edit Button */}
               <button
                 onClick={toggleEditMode}
-                className="absolute top-4 right-4 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg p-2 backdrop-filter backdrop-blur-sm transition-all duration-200"
+                className="absolute cursor-pointer top-4 right-4 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg p-2 backdrop-filter backdrop-blur-sm transition-all duration-200"
                 aria-label={editMode ? "Cancel editing" : "Edit profile"}
               >
                 {editMode ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-white"
+                    className="h-5 w-5 text-black"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -413,7 +413,7 @@ const UserProfile = () => {
                 ) : (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-white"
+                    className="h-5 w-5 text-black"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"

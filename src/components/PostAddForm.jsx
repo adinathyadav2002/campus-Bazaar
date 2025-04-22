@@ -346,7 +346,7 @@ const PostAdForm = () => {
         <div className="pt-4">
           <button
             type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg w-full flex justify-center items-center font-medium transition-colors duration-200"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg w-full flex justify-center items-center font-medium cursor-pointer transition-colors duration-200"
             disabled={loading}
           >
             {loading ? (
@@ -378,7 +378,7 @@ const PostAdForm = () => {
           <button
             type="button"
             onClick={() => navigate("/")}
-            className="mt-4 text-gray-600 hover:text-gray-800 w-full text-center py-2 font-medium transition-colors duration-200"
+            className="mt-4 cursor-pointer hover:bg-gray-300 text-gray-600 hover:text-gray-800 w-full text-center py-2 font-medium transition-colors duration-200"
           >
             Cancel
           </button>

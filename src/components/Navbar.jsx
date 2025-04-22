@@ -302,7 +302,7 @@ const Navbar = ({ onCategorySelect }) => {
                   {/* User Icon with Dropdown Toggle */}
                   <button
                     onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
-                    className="flex items-center space-x-2 text-[#002f34] p-2 hover:bg-gray-100 rounded-full transition-colors"
+                    className="flex  cursor-pointer items-center space-x-2 text-[#002f34] p-2 hover:bg-gray-100 rounded-full transition-colors"
                   >
                     <UserCircleIcon className="h-8 w-8 text-gray-600" />
                     <ChevronDown size={16} className="text-gray-500" />
@@ -322,7 +322,7 @@ const Navbar = ({ onCategorySelect }) => {
 
                       <button
                         onClick={handleProfileClick}
-                        className="flex items-center px-4 py-3 w-full text-left hover:bg-gray-50 transition-colors"
+                        className="flex cursor-pointer items-center px-4 py-3 w-full text-left hover:bg-gray-50 transition-colors"
                       >
                         <User size={18} className="mr-3 text-blue-600" />
                         <span>Profile</span>
@@ -330,7 +330,7 @@ const Navbar = ({ onCategorySelect }) => {
 
                       <button
                         onClick={handleMyPostsClick}
-                        className="flex items-center px-4 py-3 w-full text-left hover:bg-gray-50 transition-colors"
+                        className="flex cursor-pointer items-center px-4 py-3 w-full text-left hover:bg-gray-50 transition-colors"
                       >
                         <ShoppingBag
                           size={18}
@@ -356,7 +356,7 @@ const Navbar = ({ onCategorySelect }) => {
               {/* Modified Sell button */}
               <button
                 onClick={handleSellClick}
-                className="group flex items-center bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-white font-semibold px-6 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5"
+                className="group cursor-pointer flex items-center bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-white font-semibold px-6 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5"
               >
                 <Plus
                   size={20}

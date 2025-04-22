@@ -44,11 +44,13 @@ const ChatComingSoon = ({ onBack, sellerName }) => {
       {/* Content area */}
       <div className="flex-grow flex flex-col items-center justify-center p-6 max-w-4xl mx-auto w-full">
         <div className="w-full max-w-lg bg-white p-8 rounded-2xl shadow-xl">
-          <img
-            src="https://lh6.googleusercontent.com/proxy/d5ic8EViVASRN3q_uFkC8IQJ0x-WTCcXQvKXTpdRqZ2CjUkAz_kp-E7JpAlVJMTMuNF6DkUWm_eXcDWQzwRe0ENntTTsl63bHyb6"
-            alt="Coming Soon"
-            className="w-full h-auto rounded-lg shadow-lg mb-8 transform hover:scale-105 transition-transform duration-300"
-          />
+          <div className="w-full h-64 flex items-center justify-center overflow-hidden rounded-lg mb-8">
+            <img
+              src="https://lh6.googleusercontent.com/proxy/d5ic8EViVASRN3q_uFkC8IQJ0x-WTCcXQvKXTpdRqZ2CjUkAz_kp-E7JpAlVJMTMuNF6DkUWm_eXcDWQzwRe0ENntTTsl63bHyb6"
+              alt="Coming Soon"
+              className="w-full object-contain shadow-lg transform hover:scale-105 transition-transform duration-300"
+            />
+          </div>
 
           <div className="text-center">
             <h2 className="text-3xl font-bold text-gray-800 mb-4 bg-clip-text text-transparent bg-gradient-to-r from-[#002f34] to-teal-500">
@@ -68,6 +70,7 @@ const CardDetail = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const state = location.state || {};
+  const [isSharing, setIsSharing] = useState(false);
 
   const {
     images = [],
@@ -338,13 +341,109 @@ const CardDetail = () => {
     setLiked(!liked);
   };
 
+  const shareProduct = async (product) => {
+    if (!product || !product.title) {
+      console.error("Invalid product data for sharing");
+      return;
+    }
+
+    const shareText = `Check out this listing: ${
+      product.title
+    } - Price: ₹${product.price.toLocaleString()} \n${window.location.href}`;
+
+    const shareData = {
+      title: product.title,
+      text: shareText,
+      url: window.location.href,
+    };
+
+    try {
+      if (!navigator.share) {
+        // WhatsApp fallback
+        window.open(
+          `https://wa.me/?text=${encodeURIComponent(shareText)}`,
+          "_blank"
+        );
+        return;
+      }
+
+      if (product.image && navigator.canShare) {
+        try {
+          const response = await fetch(product.image);
+          if (!response.ok) throw new Error("Could not fetch image");
+
+          const blob = await response.blob();
+          const imageFile = new File([blob], "product-image.jpg", {
+            type: blob.type,
+          });
+
+          const shareDataWithImage = {
+            files: [imageFile],
+            title: product.title,
+            text: shareText,
+            url: window.location.href,
+          };
+
+          if (navigator.canShare(shareDataWithImage)) {
+            await navigator.share(shareDataWithImage);
+            console.log("Shared with image and text successfully");
+            return;
+          } else {
+            console.warn("Cannot share files with text on this platform");
+          }
+        } catch (imageError) {
+          console.warn("Image sharing failed:", imageError);
+        }
+      }
+
+      // Fallback: try to share just the text
+      await navigator.share(shareData);
+      console.log("Text-only share successful");
+    } catch (error) {
+      console.error("Sharing failed:", error);
+
+      // If WhatsApp is more appropriate for fallback:
+      const fallbackUrl = `https://wa.me/?text=${encodeURIComponent(
+        shareText
+      )}`;
+      alert("Sharing failed. Redirecting you to WhatsApp...");
+      window.open(fallbackUrl, "_blank");
+    }
+  };
+
+  const handleShare = async () => {
+    // Show a loading indicator
+    setIsSharing(true);
+
+    try {
+      // Get the first image URL
+      const imageUrl = images && images.length > 0 ? images[0] : null;
+
+      const productData = {
+        title: title,
+        price: price,
+        image: imageUrl,
+        description:
+          description.substring(0, 100) +
+          (description.length > 100 ? "..." : ""),
+      };
+
+      await shareProduct(productData);
+    } catch (error) {
+      console.error("Share handling error:", error);
+    } finally {
+      // Hide loading indicator
+      setIsSharing(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       {/* Header */}
-      <header className="py-4 px-20 mb-8">
+      <header className="py-4 px-6 md:px-20 mb-8">
         <button
           onClick={() => navigate("/")}
-          className="flex items-center hover:bg-white=/10 p-2 rounded-lg transition-all duration-300"
+          className="flex items-center cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-all duration-300"
         >
           <ArrowLeft size={20} className="mr-2" />
           <span>Back</span>
@@ -363,19 +462,23 @@ const CardDetail = () => {
           {/* Image Slider */}
           <div className="relative w-full bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
             {images.length > 0 && (
-              <div className="h-[500px] relative overflow-hidden">
+              <div className="h-[500px] relative overflow-hidden bg-gray-50">
                 <AnimatePresence mode="wait">
-                  <motion.img
+                  <motion.div
                     key={currentImage}
-                    src={images[currentImage]}
-                    alt="Product"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full flex items-center justify-center"
                     variants={imageVariants}
                     initial="initial"
                     animate="animate"
                     exit="exit"
                     transition={{ duration: 0.5 }}
-                  />
+                  >
+                    <img
+                      src={images[currentImage]}
+                      alt="Product"
+                      className="max-w-full max-h-full object-contain"
+                    />
+                  </motion.div>
                 </AnimatePresence>
 
                 {/* Image counter overlay */}
@@ -387,40 +490,46 @@ const CardDetail = () => {
 
             {/* Thumbnail strip */}
             {images.length > 1 && (
-              <div className="flex p-2 bg-gray-50 overflow-x-auto">
+              <div className="flex p-3 bg-gray-50 overflow-x-auto gap-3">
                 {images.map((img, idx) => (
                   <div
                     key={idx}
-                    className={`h-16 w-16 mr-2 rounded-md overflow-hidden cursor-pointer transition-all duration-300 ${
+                    className={`h-16 w-16 rounded-md overflow-hidden cursor-pointer transition-all duration-300 ${
                       currentImage === idx
-                        ? "ring-2 ring-[#002f34] ring-offset-2"
+                        ? "ring-2 ring-[#002f34] ring-offset-2 opacity-100"
                         : "opacity-70 hover:opacity-100"
                     }`}
                     onClick={() => setCurrentImage(idx)}
                   >
-                    <img
-                      src={img}
-                      alt={`Thumbnail ${idx}`}
-                      className="h-full w-full object-cover"
-                    />
+                    <div className="w-full h-full flex items-center justify-center bg-white">
+                      <img
+                        src={img}
+                        alt={`Thumbnail ${idx}`}
+                        className="max-h-full max-w-full object-contain"
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
             )}
 
             {/* Navigation buttons */}
-            <button
-              onClick={prevImage}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              <ChevronLeft size={20} />
-            </button>
-            <button
-              onClick={nextImage}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              <ChevronRight size={20} />
-            </button>
+            {images.length > 1 && (
+              <>
+                <button
+                  onClick={prevImage}
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                <button
+                  onClick={nextImage}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </>
+            )}
           </div>
 
           {/* Product Description */}
@@ -430,7 +539,7 @@ const CardDetail = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}
           >
-            <h3 className="text-2xl font-bold text-gray-800 flex items-center justify-between">
+            <h3 className="text-2xl font-bold text-gray-800 flex items-center justify-between flex-wrap gap-3">
               Product Description
               <span className="bg-gray-100 text-gray-600 text-sm font-normal py-1 px-3 rounded-full">
                 {category}
@@ -469,8 +578,20 @@ const CardDetail = () => {
                 >
                   <Heart size={20} fill={liked ? "currentColor" : "none"} />
                 </button>
-                <button className="p-2 rounded-full text-gray-400 hover:bg-gray-100 transition-all duration-300">
-                  <Share2 size={20} />
+                <button
+                  onClick={handleShare}
+                  disabled={isSharing}
+                  className={`p-2 rounded-full transition-all duration-300 ${
+                    isSharing
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "text-gray-400 hover:bg-gray-100"
+                  }`}
+                >
+                  {isSharing ? (
+                    <div className="w-5 h-5 border-2 border-t-transparent border-gray-400 rounded-full animate-spin"></div>
+                  ) : (
+                    <Share2 size={20} />
+                  )}
                 </button>
               </div>
             </div>
@@ -478,19 +599,19 @@ const CardDetail = () => {
             <h1 className="text-xl font-bold text-gray-800 mb-2">{title}</h1>
 
             <div className="flex items-center text-gray-500 text-sm mb-6">
-              <Calendar size={14} className="mr-1" />
+              <Calendar size={14} className="mr-1 flex-shrink-0" />
               <span>Posted on {formattedDate}</span>
             </div>
 
             <div className="border-t border-gray-100 pt-4 mt-2">
               <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <Tag size={16} className="mr-2 text-[#002f34]" />
+                <Tag size={16} className="mr-2 text-[#002f34] flex-shrink-0" />
                 Seller Information
               </h3>
 
               <div className="space-y-4">
                 <div className="flex items-center">
-                  <div className="w-12 h-12 bg-gray-200 rounded-full mr-3 flex items-center justify-center text-gray-500 font-bold">
+                  <div className="w-12 h-12 bg-gray-200 rounded-full mr-3 flex items-center justify-center text-gray-500 font-bold flex-shrink-0">
                     {userId?.name ? userId.name.charAt(0).toUpperCase() : "?"}
                   </div>
                   <div>
@@ -502,12 +623,18 @@ const CardDetail = () => {
                 </div>
 
                 <div className="flex items-center">
-                  <Phone size={16} className="mr-2 text-[#002f34]" />
+                  <Phone
+                    size={16}
+                    className="mr-2 text-[#002f34] flex-shrink-0"
+                  />
                   <p className="text-gray-700">{userId?.mobileNo || "N/A"}</p>
                 </div>
 
                 <div className="flex items-start">
-                  <MapPin size={16} className="mr-2 mt-1 text-[#002f34]" />
+                  <MapPin
+                    size={16}
+                    className="mr-2 mt-1 text-[#002f34] flex-shrink-0"
+                  />
                   <p className="text-gray-700">
                     {userId?.address || "Location not available"}
                   </p>
@@ -566,13 +693,13 @@ const CardDetail = () => {
                         })
                       }
                     >
-                      <div className="overflow-hidden rounded-xl shadow-md border border-gray-200 hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:scale-[1.02]">
-                        <div className="relative aspect-square overflow-hidden bg-gray-50">
+                      <div className="overflow-hidden rounded-xl shadow-md border border-gray-200 hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:scale-[1.02] h-full">
+                        <div className="relative aspect-square overflow-hidden bg-gray-50 flex items-center justify-center">
                           {product.images?.[0] && (
                             <img
                               src={product.images[0]}
                               alt={product.title}
-                              className="w-full h-full object-cover"
+                              className="max-w-full max-h-full object-contain"
                             />
                           )}
                           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent text-white p-4">
@@ -586,8 +713,10 @@ const CardDetail = () => {
                             {product.title}
                           </h4>
                           <p className="text-gray-500 text-sm mt-2 flex items-center">
-                            <MapPin size={12} className="mr-1" />
-                            {product.userId?.address || "Unknown location"}
+                            <MapPin size={12} className="mr-1 flex-shrink-0" />
+                            <span className="truncate">
+                              {product.userId?.address || "Unknown location"}
+                            </span>
                           </p>
                         </div>
                       </div>
