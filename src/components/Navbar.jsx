@@ -291,7 +291,7 @@ const Navbar = ({ onCategorySelect }) => {
               {!isLoggedIn && (
                 <button
                   onClick={() => setIsLoginModalOpen(true)}
-                  className="text-[#002f34] font-semibold px-4 py-2 hover:bg-gray-100 rounded-full transition-colors duration-300"
+                  className="text-[#002f34] font-semibold px-4 py-2 hover:bg-gray-100 rounded-full cursor-pointer transition-colors duration-300"
                 >
                   Login
                 </button>
@@ -343,7 +343,7 @@ const Navbar = ({ onCategorySelect }) => {
 
                       <button
                         onClick={handleLogout}
-                        className="flex items-center px-4 py-3 w-full text-left text-red-600 hover:bg-red-50 transition-colors"
+                        className="flex items-center px-4 cursor-pointer py-3 w-full text-left text-red-600 hover:bg-red-50 transition-colors"
                       >
                         <LogOut size={18} className="mr-3" />
                         <span>Logout</span>

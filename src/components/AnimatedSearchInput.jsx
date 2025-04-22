@@ -97,7 +97,7 @@ const AnimatedSearchInput = ({ searchQuery, setSearchQuery }) => {
       />
       <button
         type="submit"
-        className="bg-[#002f34] border-2 border-[#002f34] p-2 rounded-r-md hover:bg-[#003f44] transition-colors duration-200"
+        className="bg-[#002f34] cursor-pointer border-2 border-[#002f34] p-2 rounded-r-md hover:bg-[#003f44] transition-colors duration-200"
         onClick={handleSubmit}
       >
         <Search size={22} className="text-white" />

@@ -148,7 +148,7 @@ const ProductCard = ({
           {/* Like Button */}
           <button
             onClick={handleLikeClick}
-            className={`absolute top-3 right-3 p-2.5 rounded-full ${
+            className={`absolute top-3 cursor-pointer right-3 p-2.5 rounded-full ${
               liked
                 ? "bg-red-50 border border-red-100"
                 : "bg-white border border-gray-50"
