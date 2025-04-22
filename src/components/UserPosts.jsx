@@ -3,6 +3,7 @@ import axios from "axios";
 import { FaEdit, FaTrash, FaImage, FaPlus, FaHeart } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 const UserPosts = () => {
   const [posts, setPosts] = useState([]);
@@ -13,6 +14,8 @@ const UserPosts = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
   const token = localStorage.getItem("token");
+
+  const navigate = useNavigate();
 
   // State for modal & editing form
   const [selectedPost, setSelectedPost] = useState(null);
@@ -265,7 +268,7 @@ const UserPosts = () => {
 
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-3xl font-bold text-gray-800">My Posts</h2>
-        <button className="flex items-center px-5 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+        <button onClick={()=>navigate('/post-ad')} className="flex items-center px-5 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
           <FaPlus className="mr-2" size={14} />
           <span>New Post</span>
         </button>
@@ -294,7 +297,7 @@ const UserPosts = () => {
             Start sharing your items with the community by creating your first
             post.
           </p>
-          <button className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+          <button onClick={()=>navigate('/post-ad')} className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
             Create Your First Post
           </button>
         </div>
@@ -386,8 +389,10 @@ const UserPosts = () => {
 
       {/* Enhanced Modal with Backdrop Blur */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto backdrop-blur-sm">
-          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-transparent">
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">  
+           
+           
             <div
               className="fixed inset-0 transition-opacity"
               aria-hidden="true"
