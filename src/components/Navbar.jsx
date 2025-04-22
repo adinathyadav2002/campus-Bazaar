@@ -356,11 +356,11 @@ const Navbar = ({ onCategorySelect }) => {
               {/* Modified Sell button */}
               <button
                 onClick={handleSellClick}
-                className="group cursor-pointer flex items-center bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-white font-semibold px-6 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5"
+                className="group cursor-pointer flex items-center bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-white font-semibold md:px-6 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5"
               >
                 <Plus
                   size={20}
-                  className="mr-2 group-hover:rotate-90 transition-transform duration-300"
+                  className="md:mr-2 group-hover:rotate-90 transition-transform duration-300"
                 />
                 SELL
               </button>
@@ -374,7 +374,7 @@ const Navbar = ({ onCategorySelect }) => {
                 <input
                   type="text"
                   placeholder="Search for anything..."
-                  className="w-full border-2 border-gray-200 rounded-l-full py-2.5 pl-4 pr-10 outline-none focus:border-blue-400 transition-colors"
+                  className="w-full border-2 border-gray-200 md:rounded-l-full rounded-full  py-2.5 pl-4 pr-10 outline-none focus:border-blue-400 transition-colors"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -435,7 +435,7 @@ const Navbar = ({ onCategorySelect }) => {
 
               <button
                 onClick={handleSellClick}
-                className="flex items-center justify-center w-full bg-gradient-to-r from-yellow-400 to-amber-500 text-white font-medium px-4 py-3 mx-4 rounded-full"
+                className="flex items-center justify-center w-full bg-gradient-to-r from-yellow-400 to-amber-500 text-white font-medium md:px-4 px-2 py-3 md:mx-4 rounded-full"
               >
                 <Plus size={20} className="mr-2" /> SELL
               </button>

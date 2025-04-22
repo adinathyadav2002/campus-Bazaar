@@ -91,7 +91,7 @@ const AnimatedSearchInput = ({ searchQuery, setSearchQuery }) => {
       <input
         type="text"
         placeholder={placeholder}
-        className="w-full border-2 rounded-l-md py-2 px-4 outline-none focus:border-[#23e5db] transition-all duration-200 border-gray-300"
+        className="w-full border-2 md:rounded-l-md rounded-md py-2 px-4 outline-none focus:border-[#23e5db] transition-all duration-200 border-gray-300"
         value={searchQuery}
         onChange={handleInputChange}
       />
