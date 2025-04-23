@@ -315,11 +315,6 @@ const ProductList = () => {
         )}
 
         {/* Loading indicator */}
-        {loading && (
-          <div className="mt-8 flex justify-center">
-            <Spinner />
-          </div>
-        )}
       </div>
     </section>
   );
