@@ -54,6 +54,11 @@ const UserPosts = () => {
     },
   };
 
+  // scroll up when component is rendered
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   useEffect(() => {
     const fetchUserPosts = async () => {
       try {
@@ -542,9 +547,9 @@ const UserPosts = () => {
                       name="price"
                       value={editForm.price}
                       onChange={handleInputChange}
-                      className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
+                      className="cursor-not-allowed w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
                       required
-                      disabled={isSaving}
+                      disabled
                       placeholder="Enter price"
                     />
                   </div>

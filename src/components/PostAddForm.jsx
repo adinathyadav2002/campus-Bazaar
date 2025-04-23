@@ -78,6 +78,11 @@ const PostAdForm = () => {
     }
   };
 
+  // scroll up when component is rendered
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   useEffect(() => {
     const verifyUser = async () => {
       const isUserValid = await checkUserDetails();

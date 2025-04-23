@@ -211,6 +211,11 @@ const ProductList = () => {
     return pages;
   };
 
+  // use effect hook when page is changed
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [page]);
+
   return (
     <section className="bg-gray-100 py-10">
       <div className="max-w-7xl mx-auto px-4">

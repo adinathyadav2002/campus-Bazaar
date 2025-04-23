@@ -28,6 +28,11 @@ const UserProfile = () => {
   // Base API URL from environment variable
   const baseUrl = import.meta.env.VITE_BACKEND;
 
+  // scroll up when component is rendered
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   // Fetch User Information
   useEffect(() => {
     const fetchUserInfo = async () => {

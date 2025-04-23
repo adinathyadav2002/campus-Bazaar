@@ -737,13 +737,13 @@ const CardDetail = () => {
               <>
                 <button
                   onClick={prevSlide}
-                  className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 bg-white text-gray-800 p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="absolute cursor-pointer left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 bg-white text-gray-800 p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
                 >
                   <ChevronLeft size={20} />
                 </button>
                 <button
                   onClick={nextSlide}
-                  className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 bg-white text-gray-800 p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="absolute cursor-pointer right-0 top-1/2 transform -translate-y-1/2 translate-x-4 bg-white text-gray-800 p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
                 >
                   <ChevronRight size={20} />
                 </button>
