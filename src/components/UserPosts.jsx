@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { FaEdit, FaTrash, FaImage, FaPlus, FaHeart } from "react-icons/fa";
+import {
+  FaEdit,
+  FaTrash,
+  FaImage,
+  FaPlus,
+  FaHeart,
+  FaTags,
+} from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
@@ -25,8 +32,12 @@ const UserPosts = () => {
     price: "",
     description: "",
     category: "",
+    tags: [],
     images: [],
   });
+
+  // State for tag input
+  const [tagInput, setTagInput] = useState("");
 
   // Toast configuration
   const toastConfig = {
@@ -52,6 +63,8 @@ const UserPosts = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
+
+        console.log(response.data, "data");
         if (response.data.status) {
           setPosts(response.data.posts);
         } else {
@@ -77,8 +90,10 @@ const UserPosts = () => {
       price: post.price,
       description: post.description,
       category: post.category,
+      tags: post.tags || [],
       images: [],
     });
+    setTagInput(""); // Reset tag input
     setImagePreview(post.images.length > 0 ? post.images[0] : null);
     setIsModalOpen(true);
   };
@@ -101,6 +116,31 @@ const UserPosts = () => {
     }
   };
 
+  // Handle tag input change
+  const handleTagInputChange = (e) => {
+    setTagInput(e.target.value);
+  };
+
+  // Add a tag to the form
+  const addTag = (e) => {
+    e.preventDefault();
+    if (tagInput.trim() !== "" && !editForm.tags.includes(tagInput.trim())) {
+      setEditForm({
+        ...editForm,
+        tags: [...editForm.tags, tagInput.trim()],
+      });
+      setTagInput("");
+    }
+  };
+
+  // Remove a tag from the form
+  const removeTag = (indexToRemove) => {
+    setEditForm({
+      ...editForm,
+      tags: editForm.tags.filter((_, index) => index !== indexToRemove),
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSaving(true);
@@ -110,6 +150,11 @@ const UserPosts = () => {
     formData.append("price", editForm.price);
     formData.append("description", editForm.description);
     formData.append("category", editForm.category);
+
+    // Append tags to the formData
+    editForm.tags.forEach((tag) => {
+      formData.append("tags", tag);
+    });
 
     if (editForm.images.length > 0) {
       for (let i = 0; i < editForm.images.length; i++) {
@@ -210,6 +255,7 @@ const UserPosts = () => {
           price: "",
           description: "",
           category: "",
+          tags: [],
           images: [],
         });
       }, 300);
@@ -268,7 +314,10 @@ const UserPosts = () => {
 
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-3xl font-bold text-gray-800">My Posts</h2>
-        <button onClick={()=>navigate('/post-ad')} className="flex items-center px-5 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+        <button
+          onClick={() => navigate("/post-ad")}
+          className="flex items-center px-5 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+        >
           <FaPlus className="mr-2" size={14} />
           <span>New Post</span>
         </button>
@@ -297,7 +346,10 @@ const UserPosts = () => {
             Start sharing your items with the community by creating your first
             post.
           </p>
-          <button onClick={()=>navigate('/post-ad')} className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+          <button
+            onClick={() => navigate("/post-ad")}
+            className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+          >
             Create Your First Post
           </button>
         </div>
@@ -390,9 +442,7 @@ const UserPosts = () => {
       {/* Enhanced Modal with Backdrop Blur */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-transparent">
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">  
-           
-           
+          <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <div
               className="fixed inset-0 transition-opacity"
               aria-hidden="true"
@@ -532,8 +582,57 @@ const UserPosts = () => {
                       <option value="Books">Books</option>
                       <option value="Furniture">Furniture</option>
                       <option value="Clothing">Clothing</option>
+                      <option value="study-tools-electronics">
+                        Study Tools/Electronics
+                      </option>
                       <option value="Other">Other</option>
                     </select>
+                  </div>
+
+                  {/* Tags Input Section */}
+                  <div className="mb-5">
+                    <label className="block text-gray-700 font-medium mb-2">
+                      Tags
+                    </label>
+                    <div className="flex flex-wrap items-center gap-2 mb-2">
+                      {editForm.tags.map((tag, index) => (
+                        <span
+                          key={index}
+                          className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-700"
+                        >
+                          {tag}
+                          <button
+                            type="button"
+                            onClick={() => removeTag(index)}
+                            className="ml-1.5 text-blue-600 hover:text-blue-800 focus:outline-none"
+                          >
+                            ×
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex">
+                      <input
+                        type="text"
+                        value={tagInput}
+                        onChange={handleTagInputChange}
+                        className="flex-grow border border-gray-300 rounded-l-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
+                        placeholder="Add tags (e.g., electronics, new)"
+                        disabled={isSaving}
+                      />
+                      <button
+                        type="button"
+                        onClick={addTag}
+                        className="px-4 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600 transition-colors flex items-center"
+                        disabled={isSaving || !tagInput.trim()}
+                      >
+                        <FaTags className="mr-1" />
+                        Add
+                      </button>
+                    </div>
+                    <p className="mt-2 text-xs text-gray-500">
+                      Tags help buyers find your product. Add relevant keywords.
+                    </p>
                   </div>
 
                   <div className="mb-6">
