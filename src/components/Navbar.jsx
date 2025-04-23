@@ -248,7 +248,7 @@ const Navbar = ({ onCategorySelect }) => {
   return (
     <div
       className={`sticky top-0 z-50 bg-white transition-all duration-300 ${
-        scrolled ? "shadow-md py-1" : "shadow-sm py-3"
+        scrolled ? "shadow-md py-1" : "shadow-sm py-1"
       }`}
     >
       {/* Main Navbar */}
